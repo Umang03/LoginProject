@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "Login-IIT",
+    "slug": "Login-IIT",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./public/icons/ufc1024.png",
+    "splash": {
+      "image": "./public/icons/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cnq.mobile",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./public/icons/ufc1024.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.cnq.mobile",
+      "versionCode": 1
+    },
+    "web": {
+      "favicon": "./public/icons/favicon.png"
+    }
+  }
+}
