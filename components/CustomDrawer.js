@@ -1,4 +1,5 @@
 import React from 'react';
+import {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -12,13 +13,21 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import { auth } from '../firebase'
+import {firebaseConfig} from '../firebase/config'
 import { useNavigation } from '@react-navigation/core'
+import { getStorage, ref, uploadBytes ,getDownloadURL} from 'firebase/storage';
+import * as ImagePicker from 'expo-image-picker';
+import { initializeApp } from 'firebase/app';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
+// import {imageBrowse } from './imageBrowse';
+initializeApp(firebaseConfig);
 const CustomDrawer = props => {
   const navigation = useNavigation()
+
+
+
+
   const onShare = async () => {
     try {
       const result = await Share.share({
@@ -39,6 +48,57 @@ const CustomDrawer = props => {
     }
   };
 
+  const [image,setimage] =useState(null)
+ useEffect(() => {
+   
+  
+  (async () => {
+    const storage = getStorage();
+     let s = auth.currentUser?.uid;
+   
+      const reference = ref(storage, s);
+      await getDownloadURL(reference).then((x) => {
+        setimage(x);
+
+      })
+
+     if (Platform.OS !== 'web') {
+       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+       if (status !== 'granted') {
+         alert('Sorry, we need camera roll permissions to make this work!');
+       }
+     }
+   })();
+ }, []);
+
+ const pickImage = async () => {
+  
+   let result = await ImagePicker.launchImageLibraryAsync({
+     media: 'photo',
+     allowsEditing: true,
+     aspect: [4, 3],
+     quality: 1,
+   });
+   //console.log(result) ;
+
+   if (!result.cancelled) {
+     setimage(result.uri)
+   
+     const storage = getStorage(); //the storage itself
+    //  let link = result.uri
+     let s = auth.currentUser?.uid;
+      //let s='GGErg'
+      console.log(s)
+     const refi = ref(storage,s); //how the image will be addressed inside the storage
+     
+     //convert image to array of bytes
+     const img = await fetch(result.uri);
+     const bytes =await img.blob();
+
+     await uploadBytes(refi, bytes); //upload images
+   }
+ };
+
   const handleSignOut = () => {
     auth
       .signOut()
@@ -57,11 +117,14 @@ const CustomDrawer = props => {
           style={{padding: 20}}
            //source={require('./images/bg.jpg')}
           >
-          
-          <Image
+          <TouchableOpacity onPress={pickImage}>
+            <Image 
             style={{height: 80, width: 80, borderRadius: 40, marginBottom: 10}}
-            source={require('./images/image.png')}
+            source={{uri:image}}
+
+            //source={require('./images/image.png')}
           />
+          </TouchableOpacity>
           <Text
             style={{
               color: '#fff',
@@ -69,7 +132,7 @@ const CustomDrawer = props => {
               fontFamily: 'Roboto-Medium',
               marginBottom: 5,
             }}>
-            {auth.currentUser?.email}
+            {auth.currentUser?.uid}
           </Text>
           <View style={{flexDirection: 'row'}}>
             <Text

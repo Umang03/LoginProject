@@ -1,22 +1,5 @@
-import firebase from "firebase/compat/app";
-import "firebase/compat/firestore";
 import { getStorage, ref, uploadBytes } from 'firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
-
-export const firebaseConfig = {
-
-  apiKey: "AIzaSyDDQ-UeNFuTT06DYwthUY0-QmvQan62Vms",
-  authDomain: "fir-crud-3ad81.firebaseapp.com",
-  projectId: "fir-crud-3ad81",
-  storageBucket: "fir-crud-3ad81.appspot.com",
-  messagingSenderId: "1019325828014",
-  appId: "1:1019325828014:web:22df141226f061c87e563f",
-  measurementId: "G-RJG59PTCQR"
-  };
-
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig)
-}
 
 
 export default function imageBrowse() {
@@ -58,6 +41,3 @@ export default function imageBrowse() {
    }
  };
 }
-
-
-export {firebase}
